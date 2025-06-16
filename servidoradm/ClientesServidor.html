@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Clientes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans&display=swap" rel="stylesheet">
+  <style>
+    /* === NAVBAR STYLES === */
+    header {
+      background-color: #fff5f0;
+      padding: 5px 30px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-container {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 40px;
+    }
+
+    header img {
+      max-width: 150px;
+      padding-top: 5px;
+    }
+
+    header nav {
+      flex: 2;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      padding-right: 40px;
+    }
+
+    header nav a {
+      position: relative;
+      text-decoration: none;
+      color: #640E0E;
+      font-weight: 500;
+      font-family: "Albert Sans", sans-serif;
+      transition: color 0.3s ease;
+      padding-bottom: 4px;
+    }
+
+    header nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background-color: #640E0E;
+      transition: width 0.3s ease;
+    }
+
+    header nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .nav-logo {
+      flex: 1;
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 40px;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      align-items: center;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+      padding-right: 40px;
+    }
+
+    .nav-link {
+      position: relative;
+      text-decoration: none;
+      color: #640e0e;
+      font-weight: 500;
+      font-family: "Albert Sans", sans-serif;
+      transition: color 0.3s ease;
+      padding-bottom: 4px;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 0;
+      background-color: #640e0e;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: #640e0e;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .bar {
+      width: 25px;
+      height: 3px;
+      background-color: #640e0e;
+      margin: 3px 0;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 80px;
+        flex-direction: column;
+        background-color: #fdf4ef;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+        padding: 2rem 0;
+        gap: 1rem;
+      }
+
+      .nav-menu.active {
+        left: 0;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      .nav-logo {
+        padding-left: 10px;
+      }
+
+      .nav-menu {
+        padding-right: 0;
+      }
+    }
+
+    /* === CLIENTES SECTION === */
+    body {
+      font-family: 'Albert Sans', sans-serif;
+      background-color: #fdf4ef;
+      color: #333;
+      margin: 0;
+    }
+
+    .Clientes {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .quadradoc {
+      background-color: #fff;
+      border: 1px solid #e6dcd4;
+      border-radius: 8px;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .quadradoc-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr 1fr 2fr 2fr;
+      padding: 10px 15px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .quadradoc.header {
+      background-color: #fff0e6;
+      font-weight: bold;
+      border: 2px solid #f4c8a8;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo-container">
+      <img src="img/logosantoros.png" alt="Santoro's Logo" />
+    </div>
+    <nav>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">INÍCIO</a></li>
+        <li><a href="ClientesServidor.html" class="nav-link active">CLIENTES</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+  </header>
+
+  <div class="Clientes">
+    <div class="quadradoc header">
+      <div class="quadradoc-content">
+        <div>NOME</div>
+        <div>MESA</div>
+        <div>PERÍODO</div>
+        <div>N. PESSOAS</div>
+        <div>TELEFONE</div>
+        <div>E-MAIL</div>
+      </div>
+    </div>
+<div class="quadradoc"><div class="quadradoc-content"><div>João Silva</div><div>1</div><div>Almoço</div><div>2</div><div>(11) 91234-5678</div><div>joao@gmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Maria Oliveira</div><div>2</div><div>Jantar</div><div>4</div><div>(11) 98888-1234</div><div>maria@yahoo.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Lucas Costa</div><div>3</div><div>Almoço</div><div>3</div><div>(11) 97777-4567</div><div>lucas@hotmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Fernanda Lima</div><div>4</div><div>Jantar</div><div>2</div><div>(11) 93456-7890</div><div>fernanda@outlook.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Carlos Mendes</div><div>5</div><div>Almoço</div><div>1</div><div>(11) 94567-4321</div><div>carlosm@gmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Ana Paula</div><div>6</div><div>Jantar</div><div>3</div><div>(11) 95678-2345</div><div>ana.paula@mail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Rafael Souza</div><div>7</div><div>Almoço</div><div>2</div><div>(11) 99876-1234</div><div>rafael.souza@hotmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Juliana Freitas</div><div>8</div><div>Jantar</div><div>5</div><div>(11) 92345-9876</div><div>julifreitas@gmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Bruno Rocha</div><div>9</div><div>Almoço</div><div>2</div><div>(11) 90123-4567</div><div>brunor@globo.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Larissa Martins</div><div>10</div><div>Jantar</div><div>2</div><div>(15) 93456-7788</div><div>larissa.martins@email.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Pedro Henrique</div><div>11</div><div>Almoço</div><div>3</div><div>(11) 97890-1122</div><div>pedro.henrique@uol.com.br</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Camila Duarte</div><div>12</div><div>Jantar</div><div>2</div><div>(11) 90987-2233</div><div>camila.duarte@terra.com.br</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Marcelo Ribeiro</div><div>13</div><div>Almoço</div><div>1</div><div>(11) 96789-3344</div><div>marcelo.ribeiro@gmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Aline Costa</div><div>14</div><div>Jantar</div><div>4</div><div>(11) 97654-4455</div><div>aline.costa@yahoo.com.br</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Vinicius Alves</div><div>15</div><div>Almoço</div><div>2</div><div>(11) 91234-5566</div><div>vinicius.alves@hotmail.com</div></div></div>
+    <div class="quadradoc"><div class="quadradoc-content"><div>Beatriz Nunes</div><div>16</div><div>Jantar</div><div>3</div><div>(11) 93456-6677</div><div>beatriz.nunes@icloud.com</div></div></div>
+  
+  </div>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      navMenu.classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>
