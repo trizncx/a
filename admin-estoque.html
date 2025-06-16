@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Estoque - Santoro's</title>
+    <link rel="stylesheet" href="sla.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header class="navbar">
+           <div class="logo-container">
+        <img src="img/logosantoros.png" alt="Santoro's Logo" class="Logo" id="logo" />
+      </div>
+        <div class="nav-container">
+
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">INÍCIO</a>
+                </li>
+                <li class="nav-item">
+                    <a href="cardapio.html" class="nav-link active">RESERVAS</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reservas.html" class="nav-link">CLIENTES</a>
+                </li>
+                <li class="nav-item">
+                    <a href="reservas.html" class="nav-link">ESTOQUE</a>
+                </li>
+                
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Content -->
+    <div class="admin-page">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="admin-header">
+                <h1><i class="fas fa-boxes"></i> Gerenciamento de Estoque</h1>
+                <p>Controle completo do estoque do restaurante</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalItems">0</h3>
+                            <p>Total de Itens</p>
+                        </div>
+                    </div>
+                    <div class="stat-card alert">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="lowStockItems">0</h3>
+                            <p>Estoque Baixo</p>
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-icon">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="outOfStockItems">0</h3>
+                            <p>Sem Estoque</p>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="goodStockItems">0</h3>
+                            <p>Estoque Bom</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inventory Management -->
+            <div class="inventory-section">
+                <div class="section-header">
+                    <h2>Itens do Estoque</h2>
+                    <button class="btn btn-primary" id="addInventoryBtn">
+                        <i class="fas fa-plus"></i> Adicionar Item
+                    </button>
+                </div>
+                
+                <!-- Inventory Filters -->
+                <div class="filters-section">
+                    <div class="filter-group">
+                        <label for="categoryFilter">Categoria:</label>
+                        <select id="categoryFilter">
+                            <option value="all">Todas</option>
+                            <option value="vegetables">Vegetais</option>
+                            <option value="dairy">Laticínios</option>
+                            <option value="grains">Grãos</option>
+                            <option value="meat">Carnes</option>
+                            <option value="beverages">Bebidas</option>
+                            <option value="other">Outros</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="stockFilter">Status do Estoque:</label>
+                        <select id="stockFilter">
+                            <option value="all">Todos</option>
+                            <option value="low">Estoque Baixo</option>
+                            <option value="out">Sem Estoque</option>
+                            <option value="good">Estoque Bom</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <input type="text" id="searchFilter" placeholder="Buscar item...">
+                    </div>
+                    <div class="filter-group">
+                        <button class="btn btn-secondary" id="refreshBtn">
+                            <i class="fas fa-sync-alt"></i> Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="inventory-table-container">
+                    <div id="inventory-loading" class="loading-spinner" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i> Carregando estoque...
+                    </div>
+                    <div id="inventory-table"></div>
+                </div>
+            </div>
+
+            <!-- Inventory Modal -->
+            <div id="inventoryModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="inventoryModalTitle">Adicionar Item ao Estoque</h3>
+                        <span class="close" id="closeInventoryModal">&times;</span>
+                    </div>
+                    <form id="inventoryForm">
+                        <input type="hidden" id="inventoryId" name="inventoryId">
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemName">Nome do Item *</label>
+                                <input type="text" id="itemName" name="itemName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Categoria *</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Selecione uma categoria</option>
+                                    <option value="vegetables">Vegetais</option>
+                                    <option value="dairy">Laticínios</option>
+                                    <option value="grains">Grãos</option>
+                                    <option value="meat">Carnes</option>
+                                    <option value="beverages">Bebidas</option>
+                                    <option value="other">Outros</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="currentStock">Estoque Atual *</label>
+                                <input type="number" id="currentStock" name="currentStock" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="minStock">Estoque Mínimo *</label>
+                                <input type="number" id="minStock" name="minStock" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="unit">Unidade *</label>
+                                <select id="unit" name="unit" required>
+                                    <option value="">Selecione uma unidade</option>
+                                    <option value="kg">Quilogramas (kg)</option>
+                                    <option value="g">Gramas (g)</option>
+                                    <option value="l">Litros (l)</option>
+                                    <option value="ml">Mililitros (ml)</option>
+                                    <option value="un">Unidades (un)</option>
+                                    <option value="cx">Caixas (cx)</option>
+                                    <option value="pct">Pacotes (pct)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="supplier">Fornecedor</label>
+                                <input type="text" id="supplier" name="supplier" placeholder="Nome do fornecedor">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" id="cancelInventory" class="btn btn-secondary">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Salvar Item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <!-- Coluna 1: Logo e Redes Sociais -->
+      <div class="footer-column">
+        <h3 class="footer-logo">Santoro's</h3>
+        <p class="footer-description">
+          Culinária italiana autêntica elaborada com paixão e tradição por mais de três gerações.
+        </p>
+        <div class="social-links">
+          <a href="#" class="social-link">
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link">
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001 12.017.001z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-link">
+            <svg class="social-icon" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Links Rápidos -->
+      <div class="footer-column">
+        <h4 class="footer-title">LINKS RÁPIDOS</h4>
+        <ul class="footer-links">
+          <li><a href="#home" class="footer-link">Início</a></li>
+          <li><a href="#about" class="footer-link">Sobre</a></li>
+          <li><a href="#menu" class="footer-link">Cardápio</a></li>
+          <li><a href="#reservations" class="footer-link">Reservas</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 3: Informações de Contato -->
+      <div class="footer-column">
+        <h4 class="footer-title">INFORMAÇÕES DE CONTATO</h4>
+        <ul class="footer-info">
+          <li>Rua Italiana, 123</li>
+          <li>Centro</li>
+          <li>São Paulo, SP 01234-567</li>
+          <li>(11) 3456-7890</li>
+        </ul>
+      </div>
+
+      <!-- Coluna 4: Horários -->
+      <div class="footer-column">
+        <h4 class="footer-title">HORÁRIOS</h4>
+        <ul class="footer-hours">
+          <li>Seg-Qui: 17:00 - 22:00</li>
+          <li>Sex-Sáb: 17:00 - 23:00</li>
+          <li>Dom: 16:00 - 21:00</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-bottom">
+      <p>&copy; 2024 Santoros's Italian Kitchen. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/admin-estoque.js"></script>
+    <script>
+// Debug script para verificar se os elementos existem
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🔍 Verificando elementos da página...")
+  
+  const elements = {
+    'addInventoryBtn': document.getElementById("addInventoryBtn"),
+    'inventoryModal': document.getElementById("inventoryModal"),
+    'inventoryForm': document.getElementById("inventoryForm"),
+    'inventory-loading': document.getElementById("inventory-loading"),
+    'inventory-table': document.getElementById("inventory-table"),
+    'refreshBtn': document.getElementById("refreshBtn")
+  }
+  
+  console.log("📋 Elementos encontrados:")
+  for (const [name, element] of Object.entries(elements)) {
+    console.log(`  ${name}: ${element ? '✅' : '❌'}`)
+  }
+  
+  // Verificar se o script admin-estoque.js foi carregado
+  console.log("📜 Scripts carregados:")
+  const scripts = document.querySelectorAll('script[src]')
+  scripts.forEach(script => {
+    console.log(`  ${script.src}`)
+  })
+})
+</script>
+</body>
+</html>
